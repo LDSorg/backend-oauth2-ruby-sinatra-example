@@ -1,7 +1,10 @@
-ldsorg-ruby-sdk
+lds-connect-ruby
 ===============
 
-A ruby library for connecting with lds.org through ldsauth / oauth2.
+Connecting with lds.org through oauth2 using Ruby
+
+TODO
+===
 
 The library should work in two ways: connect directly by entering a username and password (commandline use) or via OAuth2.
 
