@@ -1,7 +1,7 @@
 lds-connect-ruby
 ===============
 
-Connecting with lds.org through oauth2 using Ruby
+Connect with lds.org through oauth2 using Ruby
 
 TODO
 ===
