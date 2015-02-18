@@ -1,57 +1,51 @@
 lds-connect-ruby
 ===============
 
-Connect with lds.org through oauth2 using Ruby
+Connect with lds.org through ldsconnect.org using OAuth2 (Facebook Connect) with Ruby and Sinatra
 
-TODO
+Usage
 ===
 
 The library should work in two ways: connect directly by entering a username and password (commandline use) or via OAuth2.
 
-## demo
-
-```
+```bash
+# Clone the server
 git clone git@github.com:LDSorg/lds-connect-ruby.git
 pushd lds-connect-ruby
 
+# Clone the example HTTPS/SSL certificates into ./certs
+git clone git@github.com:LDSorg/local.ldsconnect.org-certificates.git ./certs
+tree -I .git ./certs
+
+# Install Bundler (if you don't have it)
 sudo gem install bundler
 
+# Install all dependencies
 bundle install
-
-ruby app.rb
-open https://local.ldsconnect.org:4080
 ```
 
-psuedo-code usage via OAuth2
----
+### Choose your front-end
 
-Ugly psuedo-code because I don't remember how you actually do this in ruby
+If you want to go with the jQuery example, you would do this (exactly):
 
-```ruby
-require ldsorg
-
-ldsorg = LdsOrg.new({ :id => 'CLIENT_ID', :secret => 'CLIENT_SECRET', :callback => '/api/ldsauth/callback' })
-
-routes.draw |route| {
-  route.get '/dialog/authorize', 'ldsorg#authorize'
-  route.get '/api/ldsauth/callback' |user| {
-    me = ldsorg.get '/api/ldsorg/me', { bearer: user.accessToken }
-    println me.to_json
-  }
-}
+```bash
+# Clone the front-end you like best into ./public
+git clone git@github.com:LDSorg/oauth2-jquery ./public
 ```
 
-Be able to access resources as described on https://github.com/LDSorg/ldsauth using a bearer token.
+### Edit Config and Start Server
 
-psuedo-code usage via commandline
----
+```bash
+# Edit the config file, if desired
+vim ./.env
 
-```ruby
-require ldsorg
-
-ldsorg = LdsOrg.new({ :username => 'joesmith', :password => 'secret' })
-me = ldsorg.get '/api/ldsorg/me'
-println me.to_json
+# Run the sinatra server
+ruby ./app.rb
 ```
 
-Be able to access resources as described on https://github.com/LDSorg/ldsauth using username / password.
+### Visit <https://local.ldsconnect.org:4080>
+
+You **CANNOT** use `https://localhost:4080` or `https://127.0.0.1` -
+most OAuth providers don't accept false domains.
+The certificates are signed for `local.ldsconnect.org` so that you can use this example
+with a wide variety of providers.

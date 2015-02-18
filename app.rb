@@ -1,5 +1,6 @@
 require "dotenv"
 require "sinatra"
+require_relative "sinatra_ssl"
 require "ldsconnect"
 
 Dotenv.load
@@ -8,14 +9,14 @@ enable :sessions
 
 set :public_folder, File.dirname(__FILE__) + "/public"
 set :bind, "0.0.0.0"
-set :port, 4080
+set :port, 8043
 
 before "*" do
   @strategy = LdsConnect.new(
     ENV["APP_ID"],
     ENV["APP_SECRET"],
     {
-      redirect_uri: "http://local.ldsconnect.org:4080/auth/ldsconnect/callback",
+      redirect_uri: "https://local.ldsconnect.org:8043/auth/ldsconnect/callback",
       scope: []
     }
   )
@@ -44,7 +45,7 @@ get "/account.json" do
   end
 
   if profile
-    return output = "{ \"user\": #{profile.body} }"
+    return "{ \"user\": #{profile.body} }"
   end
   { error: { message: "ohnoes" } }
 end
