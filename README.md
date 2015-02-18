@@ -11,8 +11,13 @@ The library should work in two ways: connect directly by entering a username and
 ## demo
 
 ```
-git clone (the repo)
+git clone git@github.com:LDSorg/lds-connect-ruby.git
+pushd lds-connect-ruby
+
+sudo gem install bundler
+
 bundle install
+
 ruby app.rb
 open https://local.ldsconnect.org:4080
 ```
