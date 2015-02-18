@@ -50,6 +50,7 @@ git clone git@github.com:LDSorg/oauth2-jquery public
 **Note**: If you use the AngularJS frontend you will also need to run `bower install`.
 
 ```bash
+# Used for the AngularJS Example (not needed for jQuery)
 npm install -g bower
 
 pushd public
