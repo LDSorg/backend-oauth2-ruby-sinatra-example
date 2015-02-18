@@ -8,6 +8,15 @@ TODO
 
 The library should work in two ways: connect directly by entering a username and password (commandline use) or via OAuth2.
 
+## demo
+
+```
+git clone (the repo)
+bundle install
+ruby app.rb
+open https://local.ldsconnect.org:4080
+```
+
 psuedo-code usage via OAuth2
 ---
 
