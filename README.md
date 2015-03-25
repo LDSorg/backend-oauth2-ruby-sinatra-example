@@ -16,7 +16,7 @@ You can start working with test user data immediately.
 
 ```bash
 # Clone the server
-git clone git@github.com:LDSorg/lds-connect-ruby.git
+git clone https://github.com/LDSorg/lds-connect-ruby.git
 pushd lds-connect-ruby
 
 # Install Bundler (if you don't have it)
@@ -31,7 +31,7 @@ bundle install
 
 ```bash
 # Clone the example HTTPS/SSL certificates into ./certs
-git clone git@github.com:LDSorg/local.ldsconnect.org-certificates.git ./certs
+git clone https://github.com/LDSorg/local.ldsconnect.org-certificates.git ./certs
 tree -I .git ./certs
 ```
 
@@ -44,7 +44,7 @@ See [github.com/ldsorg](https://github.com/ldsorg?query=oauth2-) for a list of f
 
 ```bash
 # The jQuery Example
-git clone git@github.com:LDSorg/oauth2-jquery public
+git clone https://github.com/LDSorg/frontend-oauth2-jquery-example.git public
 ```
 
 **Note**: If you use the AngularJS frontend you will also need to run `bower install`.
