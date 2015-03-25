@@ -7,16 +7,29 @@ Dotenv.load
 
 enable :sessions
 
-set :public_folder, File.dirname(__FILE__) + "/public"
+set :public_folder, File.join(File.dirname(File.absolute_path(__FILE__)), "public").to_s
 set :bind, "0.0.0.0"
-set :port, 8043
+set :port, ENV["APP_PORT"]
+
+sleep 0.25
+puts ""
+puts ""
+puts "Loading #{ENV['APP_PROTOCOL']}://#{ENV['APP_HOST']} ..."
+puts ""
+puts File.join(File.dirname(File.absolute_path(__FILE__)), "certs", "ca").to_s
+puts ""
+sleep 1
 
 before "*" do
+  ca_path = File.join(File.dirname(File.absolute_path(__FILE__)), "certs", "ca").to_s
+
   @strategy = LdsConnect.new(
     ENV["APP_ID"],
     ENV["APP_SECRET"],
     {
-      redirect_uri: "https://local.ldsconnect.org:8043/auth/ldsconnect/callback",
+      redirect_uri: "#{ENV['APP_PROTOCOL']}://#{ENV['APP_HOST']}/auth/ldsconnect/callback",
+      # the intermediate and root for local.ldsconnect.org happen to be the same needed for ldsconnect.org
+      ssl: { ca_path: ca_path },
       scope: []
     }
   )
