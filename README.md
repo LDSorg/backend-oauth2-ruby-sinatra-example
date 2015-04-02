@@ -24,6 +24,9 @@ sudo gem install bundler
 
 # Install all dependencies
 bundle install
+
+# Copy the sample app keys db
+rsync -av db.sample.json db.json
 ```
 
 2. Clone SSL Certs
@@ -40,7 +43,7 @@ tree -I .git ./certs
 
 You need to clone the frontend 
 
-See [github.com/ldsorg](https://github.com/ldsorg?query=oauth2-) for a list of frontends examples / seed projects.
+See [github.com/ldsorg](https://github.com/ldsorg?query=frontend-) for a list of frontends examples / seed projects.
 
 ```bash
 # The jQuery Example
