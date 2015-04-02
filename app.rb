@@ -1,7 +1,8 @@
-require "dotenv"
 require "sinatra"
+require "json"
 require_relative "sinatra_ssl"
-require "ldsconnect"
+require "oauth3"
+require "dotenv"
 
 Dotenv.load
 
@@ -20,16 +21,40 @@ puts File.join(File.dirname(File.absolute_path(__FILE__)), "certs", "ca").to_s
 puts ""
 sleep 1
 
-before "*" do
-  ca_path = File.join(File.dirname(File.absolute_path(__FILE__)), "certs", "ca").to_s
+class Registrar
+  def initialize(filename)
+    @filename = filename
 
-  @strategy = LdsConnect.new(
-    ENV["APP_ID"],
-    ENV["APP_SECRET"],
+    File.open(filename, "r") do |f|
+      @store = JSON.parse(f.read())
+    end
+  end
+
+  def options
+    return {
+      allowed_ips: [],
+      allowed_domains: [ "local.ldsconnect.org", "local.lds.io" ]
+    }
+  end
+
+  def register(provider_uri, id, secret)
+    @store[provider_uri] = { 'id' => id, 'secret' => secret }
+    File.open(@filename, "w") do |f|
+      f.write(JSON.pretty_generate(@store))
+    end
+  end
+
+  def get(provider_uri)
+    @store[provider_uri]
+  end
+end
+
+configure do
+  @@registrar = Registrar.new('db.json')
+  @@oauth3 = Oauth3.new(
+    @@registrar,
     {
-      redirect_uri: "#{ENV['APP_PROTOCOL']}://#{ENV['APP_HOST']}/auth/ldsconnect/callback",
-      # the intermediate and root for local.ldsconnect.org happen to be the same needed for ldsconnect.org
-      ssl: { ca_path: ca_path },
+      redirect_uri: "https://local.ldsconnect.org:8043/api/oauth3/authorization_code_callback",
       scope: []
     }
   )
@@ -39,13 +64,19 @@ get "/" do
   File.read(File.join("public", "index.html"))
 end
 
-get "/auth/ldsconnect" do
-  redirect to(@strategy.authorize_url)
+get %r{/api/oauth3/authorization_redirect/(.*)} do |provider_uri|
+  provider_uri = @@oauth3.normalize_provider_uri(provider_uri)
+  # TODO create strategy here params['provider_uri']
+  redirect to(@@oauth3.authorize_url(provider_uri))
 end
 
-get "/auth/ldsconnect/callback" do
+get "/api/oauth3/authorization_code_callback" do
+  provider_uri = params[:provider_uri]
+  provider_uri = @@oauth3.normalize_provider_uri(provider_uri)
+
   if code = params[:code] 
-    if token = @strategy.get_token(code).token
+    if token = @@oauth3.get_token(provider_uri, code).token
+      session[:provider_uri] = provider_uri
       session[:token] = token
     end
   end
@@ -53,12 +84,15 @@ get "/auth/ldsconnect/callback" do
 end
 
 get "/account.json" do
+  provider_uri = session[:provider_uri]
+
   if token = session[:token]
-    profile = @strategy.get_profile(token)
+    profile = @@oauth3.get_profile(provider_uri, token)
   end
 
   if profile
     return "{ \"user\": #{profile.body} }"
   end
+
   { error: { message: "ohnoes" } }
 end
