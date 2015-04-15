@@ -1,6 +1,7 @@
 require "sinatra"
 require "json"
 require_relative "sinatra_ssl"
+require_relative "queryparams"
 require "oauth3"
 require "dotenv"
 
@@ -65,28 +66,46 @@ get "/" do
 end
 
 get %r{/api/oauth3/authorization_redirect/(.*)} do |provider_uri|
-  provider_uri = @@oauth3.normalize_provider_uri(provider_uri)
-  # TODO create strategy here params['provider_uri']
-  redirect to(@@oauth3.authorize_url(provider_uri))
+  params.delete("splat")
+  params.delete("captures")
+
+  browser_state = params[:state] or params[:browser_state]
+  if not browser_state
+    return '{ "error": {' +
+      ' "code": "E_NO_BROWSER_STATE",' +
+      ' "message": "Developer Error: Please create a random string as &state={{random}}"' +
+      '} }'
+  end
+
+  redirect to(@@oauth3.authorize_url(provider_uri, params))
 end
 
 get "/api/oauth3/authorization_code_callback" do
-  provider_uri = params[:provider_uri]
-  provider_uri = @@oauth3.normalize_provider_uri(provider_uri)
+  result_params = @@oauth3.authorization_code_callback(params)
 
-  if code = params[:code] 
-    if token = @@oauth3.get_token(provider_uri, code).token
-      session[:provider_uri] = provider_uri
-      session[:token] = token
-    end
+  # The result_params will contain the necessary success and failure
+  # keys and values for oauth3.html to interpret and give you the
+  # proper callback on the client
+  if result_params[:access_token] and result_params[:provider_uri]
+    provider_uri = result_params[:provider_uri]
+    session[provider_uri] = {
+      updated_at: Time.now,
+      access_token: result_params[:access_token],
+      provider_uri: result_params[:provider_uri]
+    }
   end
-  File.read(File.join("public", "oauth-close.html"))
+
+  redirect to("oauth3.html#" + QueryParams.stringify(result_params))
 end
 
-get "/account.json" do
-  provider_uri = session[:provider_uri]
+get "/api/ldsio/accounts" do
+  provider_uri = params[:provider_uri]
 
-  if token = session[:token]
+  if provider_uri
+    token = session[provider_uri][:access_token]
+  end
+
+  if token
     profile = @@oauth3.get_profile(provider_uri, token)
   end
 
