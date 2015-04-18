@@ -4,12 +4,19 @@ lds-connect-ruby-example
 A minimal example using the OAuth2 (Facebook Connect) and ldsconnect gems with ruby v2.0+ to get an
 lds.org (or Facebook) user profile.
 
-Zero-Config Install and Run
+The Easy Way: Zero-Config Install and Run
 ================
 
 Connect with lds.org through ldsconnect.org using OAuth2 (Facebook Connect) with Ruby and Sinatra
 
 You can start working with test user data immediately.
+
+```bash
+curl -fsSL https://bit.ly/install-lds-api-technical-demo-ruby | bash
+```
+
+The Hard Way
+============
 
 1. Clone Backend
 ----------------
