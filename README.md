@@ -54,7 +54,7 @@ See [github.com/ldsorg](https://github.com/ldsorg?query=frontend-) for a list of
 
 ```bash
 # The jQuery Example
-git clone https://github.com/LDSorg/frontend-oauth2-jquery-example.git public
+git clone https://github.com/LDSorg/frontend-oauth2-browser-jquery-example.git public
 ```
 
 You'll also need to install a few small dependencies (oauth3 and lds-api)
