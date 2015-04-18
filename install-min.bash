@@ -3,6 +3,7 @@ set -e
 set -u
 
 FC_FRONTEND_DIR=""
+FC_FRONTEND_DIRNAME="frontend-jquery"
 
 #curl -fsSL https://bit.ly/install-lds-api-technical-demo-ruby | bash
 
