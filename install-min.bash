@@ -24,7 +24,7 @@ git clone https://github.com/LDSorg/frontend-oauth2-jquery-example.git ./fronten
 ln -s ./frontend-jquery public > /dev/null
 
 echo "Installing Bower Components... (this will take several seconds, maybe a minute)"
-pushd ./frontend > /dev/null
+pushd ./frontend-jquery > /dev/null
 bower install --silent > /dev/null
 #jade app/**/*.jade
 FC_FRONTEND_DIR="$(pwd)"
