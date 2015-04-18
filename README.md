@@ -50,15 +50,19 @@ See [github.com/ldsorg](https://github.com/ldsorg?query=frontend-) for a list of
 git clone https://github.com/LDSorg/frontend-oauth2-jquery-example.git public
 ```
 
-**Note**: If you use the AngularJS frontend you will also need to run `bower install`.
+You'll also need to install a few small dependencies (oauth3 and lds-api)
 
 ```bash
-# Used for the AngularJS Example (not needed for jQuery)
+# The jQuery Example
 npm install -g bower
 
-pushd public
 bower install
-popd
+```
+
+Copy the default config file
+
+```bash
+rsync -av db.sample.json db.json
 ```
 
 3. Run Server
@@ -96,23 +100,21 @@ most OAuth providers don't accept false domains.
 The certificates are signed for `local.ldsconnect.org` so that you can use this example
 with a wide variety of providers.
 
-
-5. Login as dumbledore
+5. Login
 -----------
 
-You **cannot** login as a real lds.org user as a test application.
-If you try, you will get an error.
-
-The login you must use for test applications is `dumbledore` with the passphrase `secret`.
+Currently you must log in as a real LDS.org user. In the future I'd like to have a dummy user available
+so that you can explore the technical aspects of the api without logging in
+(and skilled non-members can help us out too).
 
 6. Modifying the Example
 -----------------
 
-The config is stored in `.env`
+The config is stored in `db.json`
 
 ```bash
 # Edit the config file, if desired
-vim ./.env
+vim ./db.json
 ```
 
 If you use your own certs and need to change the names rather than simply copy them over,
