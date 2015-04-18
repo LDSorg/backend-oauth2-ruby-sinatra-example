@@ -2,4 +2,26 @@
     "id": "TEST_ID_56f6f3551bd4faa420a3dd6e",
     "secret": "TEST_SK_jtgoHAMKdIgoWSYd8E1gBIrW"
   }
+, "https://facebook.com": {
+    "id": "1592518370979179",
+    "secret": "dd067af5becc203524507dba86eb3020",
+    "directives": {
+      "authorization_dialog": {
+        "method": "GET"
+      , "url": "https://www.facebook.com/dialog/oauth"
+      }
+    , "access_token": {
+        "method": "GET"
+      , "url": "https://graph.facebook.com/oauth/access_token"
+      , "params": {
+          "redirect_uri": "https://local.ldsconnect.org/api/oauth3/fake_exchange_authorization_code"
+        }
+      }
+    , "profile": {
+        "method": "GET"
+      , "url": "https://graph.facebook.com/me"
+      }
+    , "authn_scope": ""
+    }
+  }
 }

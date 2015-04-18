@@ -2,6 +2,7 @@ require "sinatra"
 require "json"
 require_relative "sinatra_ssl"
 require_relative "queryparams"
+#require_relative "oauth3"
 require "oauth3"
 require "dotenv"
 
@@ -55,7 +56,8 @@ configure do
   @@oauth3 = Oauth3.new(
     @@registrar,
     {
-      redirect_uri: "https://local.ldsconnect.org:8043/api/oauth3/authorization_code_callback",
+      authorization_code_callback_uri: "https://local.ldsconnect.org:8043/api/oauth3/authorization_code_callback",
+      authorized_redirect_uris: ["https://local.ldsconnect.org:8043/oauth3.html"],
       scope: []
     }
   )
@@ -77,10 +79,22 @@ get %r{/api/oauth3/authorization_redirect/(.*)} do |provider_uri|
       '} }'
   end
 
-  redirect to(@@oauth3.authorize_url(provider_uri, params))
+  uri = @@oauth3.authorize_url(provider_uri, params)
+  puts ""
+  puts "Redirecting to #{uri}"
+  puts ""
+  puts ""
+
+  redirect to(uri)
 end
 
 get "/api/oauth3/authorization_code_callback" do
+  puts ""
+  puts "Got callback"
+  puts params
+  puts ""
+  puts ""
+
   result_params = @@oauth3.authorization_code_callback(params)
 
   # The result_params will contain the necessary success and failure
@@ -96,6 +110,18 @@ get "/api/oauth3/authorization_code_callback" do
   end
 
   redirect to("oauth3.html#" + QueryParams.stringify(result_params))
+end
+
+get "/api/facebook/profile" do
+  provider_uri = params[:provider_uri]
+
+  if provider_uri
+    token = session[provider_uri][:access_token]
+  end
+
+  if token
+    profile = @@oauth3.get_profile(provider_uri, token)
+  end
 end
 
 get "/api/ldsio/accounts" do
