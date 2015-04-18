@@ -11,7 +11,7 @@ git clone https://github.com/LDSorg/backend-oauth2-ruby-sinatra-example.git ./ld
   > /dev/null 2> /dev/null
 pushd ./lds-api-ruby-demo > /dev/null
 
-echo "Installing ExpressJS Static File Server... (this will take several seconds)"
+echo "Installing Sinatra Static File Server... (this will take several seconds)"
 bundle install > /dev/null
 
 echo "Cloning Developer HTTPS Certificates for https://local.ldsconnect.org:8043..."
