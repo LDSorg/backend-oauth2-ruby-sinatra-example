@@ -19,8 +19,8 @@ echo "Cloning Developer HTTPS Certificates for https://local.ldsconnect.org:8043
 git clone https://github.com/LDSorg/local.ldsconnect.org-certificates.git ./certs \
   > /dev/null 2> /dev/null
 
-echo "Cloning the facecards.org-frontend and creating ./public link"
-git clone https://github.com/LDSorg/frontend-oauth2-jquery-example.git ./frontend-jquery \
+echo "Cloning the frontend-oauth2-jquery-example as frontend-jquery and creating ./public link"
+git clone https://github.com/LDSorg/frontend-oauth2-browser-jquery-example.git ./frontend-jquery \
   > /dev/null 2> /dev/null
 ln -s ./frontend-jquery public > /dev/null
 
