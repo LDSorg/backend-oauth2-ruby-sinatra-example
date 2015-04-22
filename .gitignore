@@ -1,3 +1,7 @@
+db.json
+frontend-
+certs
+
 Gemfile.lock
 *.sw*
 public
