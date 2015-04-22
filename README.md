@@ -1,30 +1,45 @@
-lds-connect-ruby-example
-===============
+# LDS API OAuth2 ruby example
 
-A minimal example using the OAuth2 (Facebook Connect) and ldsconnect gems with ruby v2.0+ to get an
-lds.org (or Facebook) user profile.
+A minimal backend example using the [oauth3](https://github.com/OAuth3/ruby-oauth3) gem and sinatra
+to get an lds.org user profile via [LDS I/O](https://lds.io).
 
-The Easy Way: Zero-Config Install and Run
+This backend is part of the LDS API
+[Choose your own Adventure](https://github.com/LDSorg/choose-your-own-adventure) series.
+
+That means that you can **couple this backend** with **any compatible frontend** example and start
+developing with Zero Configuration.
+
+Zero-Config Install and Run
 ================
-
-Connect with lds.org through ldsconnect.org using OAuth2 (Facebook Connect) with Ruby and Sinatra
 
 You can start working with test user data immediately.
 
 ```bash
-curl -fsSL https://bit.ly/install-lds-api-technical-demo-ruby | bash
+curl -fsSL https://bit.ly/lds-api-adventure -o adventure.bash
+bash ./adventure.bash ruby jquery
 ```
 
-The Hard Way
-============
+No configuration changes are required and working test API keys are provided.
+
+You will be able to experiment at <https://local.ldsconnect.org:8043>
+
+The "Hard" Way
+==============
+
+If you don't have io.js or node.js already installed,
+[install it](https://github.com/coolaj86/iojs-install-script) and come back.
+
+(even though this example runs in ruby, some of the required build tools are in node)
 
 1. Clone Backend
 ----------------
 
+See [github.com/ldsorg](https://github.com/ldsorg?query=backend-) for a list of backends examples / seed projects.
+
 ```bash
 # Clone the server
-git clone https://github.com/LDSorg/lds-connect-ruby.git
-pushd lds-connect-ruby
+git clone https://github.com/LDSorg/backend-oauth2-ruby-sinatra-example.git ./backend-oauth2-ruby
+pushd ./backend-oauth2-ruby
 
 # Install Bundler (if you don't have it)
 sudo gem install bundler
@@ -36,8 +51,11 @@ bundle install
 rsync -av db.sample.json db.json
 ```
 
+
 2. Clone SSL Certs
 ------------------
+
+These certs are authentically valid for `local.ldsconnect.org`, which you are required to use during development.
 
 ```bash
 # Clone the example HTTPS/SSL certificates into ./certs
@@ -54,33 +72,27 @@ See [github.com/ldsorg](https://github.com/ldsorg?query=frontend-) for a list of
 
 ```bash
 # The jQuery Example
-git clone https://github.com/LDSorg/frontend-oauth2-browser-jquery-example.git public
+git clone https://github.com/LDSorg/frontend-oauth2-jquery-example.git ./frontend-oauth2-jquery
+rm -f public
+ln -s frontend-oauth2-jquery public
 ```
 
-You'll also need to install a few small dependencies (oauth3 and lds-api)
-
 ```bash
-# The jQuery Example
 npm install -g bower
 
+pushd ./frontend-oauth2-jquery
 bower install
+popd
 ```
 
-Copy the default config file
-
-```bash
-rsync -av db.sample.json db.json
-```
-
-3. Run Server
+4. Run Server
 -------------
 
 ```bash
-# Run the sinatra server
 ruby ./app.rb
 ```
 
-4. Go to <https://local.ldsconnect.org:8043>
+5. Go to <https://local.ldsconnect.org:8043>
 ----------
 
 **This domain points to YOUR computer**.
@@ -107,13 +119,6 @@ most OAuth providers don't accept false domains.
 The certificates are signed for `local.ldsconnect.org` so that you can use this example
 with a wide variety of providers.
 
-5. Login
------------
-
-Currently you must log in as a real LDS.org user. In the future I'd like to have a dummy user available
-so that you can explore the technical aspects of the api without logging in
-(and skilled non-members can help us out too).
-
 6. Modifying the Example
 -----------------
 
@@ -126,7 +131,6 @@ vim ./db.json
 
 If you use your own certs and need to change the names rather than simply copy them over,
 you can change them in `./sinatra_ssl.rb`
-
 
 Credits
 ======
