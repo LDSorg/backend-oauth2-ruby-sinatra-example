@@ -5,3 +5,5 @@ certs
 Gemfile.lock
 *.sw*
 public
+
+.DS_Store
